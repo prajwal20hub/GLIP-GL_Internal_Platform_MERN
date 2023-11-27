@@ -1,0 +1,17 @@
+body {
+  font-family: 'Lucida Sans Unicode';
+}
+
+/* MUI DatePicker */
+.myDatePicker .Mui-focused fieldset.MuiOutlinedInput-notchedOutline {
+  border-color: #F37037;
+}
+
+/* OTP Modal CSS */
+.abc button{
+  border:none;
+  /* color: green; */
+}
+.abc button:visited{
+  color: blue;
+}
