@@ -459,7 +459,7 @@ function EmpListAdmin() {
 
               <ButtonDiv>
                 <SubmitButton
-                  onClick={() => ChangeDesignation(currUser.id)}
+                  onClick={() => ChangeDesignation(currUser._id)}
                 >
                   Submit
                 </SubmitButton>

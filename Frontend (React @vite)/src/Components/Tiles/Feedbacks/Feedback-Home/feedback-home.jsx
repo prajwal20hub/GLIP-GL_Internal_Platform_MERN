@@ -25,7 +25,11 @@ const FeedbackHome = () => {
     }, [])
 
     const fetchData = async () => {
+        setCompSurStat(false);
+        setTechSurStat(false);
+
 //from token_validation middleware's decoded data we get user's id in backend so no need to send user's id in url
+       
         await axios.get(`/api/company-survey/user_id`, {            
             headers: {
                 'Authorization': `Bearer ${localStorage.token}`
@@ -53,7 +57,6 @@ const FeedbackHome = () => {
             link: (user_type === 'HR Admin') ?
                 `/dashboard/feedback-chart/${id}` :
                 `/dashboard/feedback-form/${id}`
-
         },
         {
             label: "Company Survey",

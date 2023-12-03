@@ -10,6 +10,10 @@ const getTechSurveys = asyncHandler(async(req,res)=> {
 //GET Tech Survey by by decoded token data saved in req.user in token_validation middleware
 const getTechSurvey = asyncHandler(async(req,res)=> {    
     const techSurvey = await TechSurvey.findOne({user_id: req.user.id})
+    if(!techSurvey){
+        res.status(404)
+        throw new Error('Not found!')
+    }
     res.status(200).json(techSurvey)
 });
 

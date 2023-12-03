@@ -7,13 +7,13 @@ const errorHandler = (err,req,res,next) => {
         // Use only when you get 200 (res.statusCode) but server crashes. 
         // Purpose: [to find Internal code errors]
 
-        case statusCode:               
-            res.json({
-                title: 'Internal Code Error',
-                message: err.message,
-                stackTrace: err.stack
-            })    
-        break;
+        // case statusCode:               
+        //     res.json({
+        //         title: 'Internal Code Error',
+        //         message: err.message,
+        //         stackTrace: err.stack
+        //     })    
+        // break;
         case constants.VALIDATION_ERROR :
             res.json({
                 title: 'Validation Failed',

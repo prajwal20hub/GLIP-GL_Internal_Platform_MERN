@@ -9,12 +9,15 @@ const getCompSurveys = asyncHandler(async(req,res)=> {
 
 //GET Company Survey by decoded token data saved in req.user in token_validation middleware
 const getCompSurvey = asyncHandler(async(req,res)=> {
-    const compSurvey = await CompanySurvey.findOne({user_id: req.user.id})
+    const compSurvey = await CompanySurvey.findOne({user_id: req.user.id});
+    if(!compSurvey){
+        res.status(404)
+        throw new Error('Not found!')
+    }
     res.status(200).json(compSurvey)
 });
 
-//POST Tech Survey 
-
+//POST Tech Survey
 const createCompSurvey = asyncHandler(async (req,res)=> {
     const {empSatisfaction, trainingDev, empEngagement, empBenifits, empLeadership, empFuturePlanning, empWorkDiversity, empCommunication} = req.body;
 
