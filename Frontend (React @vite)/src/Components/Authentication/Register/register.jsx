@@ -57,7 +57,7 @@ const Register = () => {
   const fetchData = async () => {
     await axios.get('/api/total-registrations')
       .then((res) => {
-        setTotalRegistered(res.data.total_registrations + 1);   
+        setTotalRegistered(res.data.total_registrations + 1);
         setUser({ ...user, "empID": res.data.total_registrations + 1001 })
       })
   }
@@ -107,30 +107,34 @@ const Register = () => {
 
   const onSubmit = async (e) => {
     e.preventDefault();       //PREVENT REFRESH OF PAGE
+
+    // const postObj = user;   //[Do not use this] shallow copy (concurrent changes)
+
+    const postObj = { ...user };        //deep copy (avoid concurrent changes)  
+    delete (postObj.confirmPass);       //we dont require this in backend
+
     const registerError = validationRegister(user);             //validation
     if (registerError !== null) {
       setError(registerError);
       return;
     }
     else {
-      delete (user.confirmPass);       //we dont require this in db
-      await axios.post('/api/users/register',user)
-        .then((res) => {
+      setError(null);
+      await axios.post('/api/users/register', postObj)
+        .then(() => {
           setError(null);
-          //we require this in leave-management-emp
-          axios.post("/api/leaves-remain", {    
+          axios.post("/api/leaves-remain", {       //we require this in leave-management-emp
             "empID": empID,
             "empName": `${fname} ${lname}`,
             //other fields set default in schema so no need to post them
-          });
-
-          axios.put("/api/total-registrations", {
-            total_registrations: totalRegistered,      //update +1
-          });
-
+          })
+            .then(() => {
+              axios.put("/api/total-registrations", {
+                total_registrations: totalRegistered,      //update +1
+              })
+            });
           Swal.fire("Congrats", "You have Successfully Registered.", "success");
           navigate('/')
-          return;
         })
         .catch((err) => {
           console.log(err)
