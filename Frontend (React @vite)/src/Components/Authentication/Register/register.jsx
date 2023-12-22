@@ -138,6 +138,7 @@ const Register = () => {
         })
         .catch((err) => {
           console.log(err)
+          Swal.fire("Oops!", err.response.data.message, "error");
           setError(err.response.data.message)
         })
     }
