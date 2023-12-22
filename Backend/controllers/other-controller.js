@@ -34,7 +34,7 @@ const updateTotalRegs = asyncHandler (async (req,res)=> {
         { new: true }
       );
 
-    if(!updatedCount){
+    if(!updatedTotalRegs){
         res.status(401)
         throw new Error('Request body is not valid!')
     }

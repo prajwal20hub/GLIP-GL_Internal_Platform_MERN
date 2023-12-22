@@ -30,16 +30,24 @@ const createUser = asyncHandler(async (req, res) => {
         }
     };
 
-    const { email } = req.body;
-    const avilableUSer = await User.findOne({ email })
-    if (avilableUSer) {
-        res.status(403)
-        throw new Error('Email is already registered!')
+    const { email, phone } = req.body;
+    const avilableUserEmail = await User.findOne({ email });
+    const avilableUserPhone = await User.findOne({ phone });
+    
+    if (avilableUserEmail) {
+        res.status(403);
+        throw new Error('Email is already registered!');
     }
+    if (avilableUserPhone) {
+        res.status(403);
+        throw new Error('Phone Number is already registered!');
+    }
+
     //Encrypt the password
     req.body.password = await bcrypt.hash(req.body.password, 10);
 
-    const user = await User.create(req.body)
+    const user = await User.create(req.body);
+
     if (user) {
         res.status(201).json({
             id: user.id,
