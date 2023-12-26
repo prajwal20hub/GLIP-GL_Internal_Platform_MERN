@@ -10,6 +10,7 @@ body {
 /* OTP Modal CSS */
 .abc button{
   border:none;
+  font-style: italic;
   /* color: green; */
 }
 .abc button:visited{

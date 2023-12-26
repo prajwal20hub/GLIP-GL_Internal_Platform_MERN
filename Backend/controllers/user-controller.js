@@ -1,9 +1,8 @@
 const asyncHandler = require('express-async-handler')
 const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
-const User = require('../models/user.model.js')
 const { fields } = require('../constants.js')
-
+const User = require('../models/user.model.js')
 
 // GET all users
 const getUsers = asyncHandler(async (req, res) => {
@@ -219,8 +218,12 @@ const forgotPassword = asyncHandler(async (req, res) => {
     res.status(200).json(updatedUser)
 });
 
+//GET Current Logged in User via token
 const currentUser = asyncHandler(async (req, res) => {
     res.status(200).json(req.user);
 });
+
+
+
 
 module.exports = { getUsers, getManagers, createUser, getUser, loginUser, deleteUser, resetPassword, updateUserType, updateDesignation, forgotPassword, currentUser }

@@ -29,9 +29,10 @@ import GLlogo from "../../../Utils/Images/GL-logo.jpg";
 import OTPInput, { ResendOTP } from "otp-input-react";
 
 const ForgotPassword = () => {
+  const Base_URL = import.meta.env.VITE_BASE_URL;
+
   const navigate = useNavigate();
-  const [users, setUsers] = useState([]);
-  const [currUser, setCurrUser] = useState([]);
+  const [currUser, setCurrUser] = useState({});
   const [showModal, setShowModal] = useState(false);
   const [otp, setOtp] = useState("");
   const [newDiv, setNewDiv] = useState(false);
@@ -39,38 +40,31 @@ const ForgotPassword = () => {
   const [error, setError] = useState(null);
   const [errorOtp, setErrorOtp] = useState(null);
 
-  useEffect(() => {
-    fetchdata();
-  }, []);
-
-  const fetchdata = async () => {
-    await axios.get(`/api/users`)
-      .then((res) => {
-        setUsers(res.data);
-      })
-      .catch((err) => {
-        console.log(err)
-      })
-  };
-
   const [user, setUser] = useState({
     email: '',
     password: '',
-    confirmPass: '',
+    confirmPass: ''
   });
 
   const { email, password, confirmPass } = user;
 
   var arrUserKeys = Object.keys(user);
 
-  const handleSubmitOTP = () => {
-    if (otp === "1234" || otp === "1111" || otp === "0000") {
-      // setShowComponent(true);
-      setShowModal(false);
-      setNewDiv(true);
-    } else {
-      setErrorOtp("Incorrect OTP");
-    }
+  const handleSubmitOTP = async () => {
+    debugger;
+    await axios.post(`${Base_URL}/api/otp/verify-otp`, { email, otp: otp.toString() })
+      .then((res) => {
+        debugger;
+        Swal.fire("Congrats", res.data.message, "success");
+        setShowModal(false);
+        setNewDiv(true);
+        setErrorOtp(null);
+      })
+      .catch((err) => {
+        debugger;
+        setErrorOtp(err.response.data.message);
+        Swal.fire("Oops!", err.response.data.message, "error");
+      });
   };
 
   const onInputChange = (e, n) => {
@@ -79,8 +73,7 @@ const ForgotPassword = () => {
     for (let i = 0; i < n; i++) {
       if (Object.values(user)[i] === "") {
         document.getElementsByName(arrUserKeys[i])[0].style.color = "red";
-        document.getElementsByName(arrUserKeys[i])[1].style.borderBottom =
-          "2px solid red";
+        document.getElementsByName(arrUserKeys[i])[1].style.borderBottom = "2px solid red";
       }
     }
 
@@ -93,35 +86,31 @@ const ForgotPassword = () => {
     }
   };
 
-  const onResend = () => {
+  const onResend = async () => {
     setErrorOtp(null);
     setFlag(null);
     setOtp(null);
+    await axios.get(`${Base_URL}/api/otp/email/${email}`);  //new otp set in db
   };
 
-  var Status1 = false;
-
-  const onSubmit1 = (e) => {
+  const onSubmit1 = async (e) => {
     e.preventDefault(); //PREVENT REFRESH OF PAGE
 
     const EmailError = validateEmail(user); //validation
     if (EmailError !== null) {
       setError(EmailError);
-      return;
     }
     else {
       setError(null);
-      const currData = users.filter((obj) => obj.email === email)     //return array of single user's obj
-      setCurrUser(currData[0])                 //at index 0
-      if (currData.length === 1) {
-        setShowModal(true);
-        Status1 = true
-      }
-
-      if (Status1 === false) {
-        setError("Email not Registered!");
-        Swal.fire("Oops!", "Email not Registered!", "error");
-      }
+      await axios.get(`${Base_URL}/api/otp/email/${email}`)
+        .then((res) => {
+          setCurrUser(res.data);
+          setShowModal(true);
+        })
+        .catch((err) => {
+          setError(err.response.data.message);
+          Swal.fire("Oops!", err.response.data.message, "error");
+        })
     }
   };
 
@@ -135,7 +124,7 @@ const ForgotPassword = () => {
     else {
       setError(null);
       if (newDiv === true) {
-        await axios.put(`/api/users/forgot-password/${currUser._id}`, {password})
+        await axios.put(`${Base_URL}/api/users/forgot-password/${currUser._id}`, { password })
           .then((res) => {
             Swal.fire("Congrats", "You have Successfully changed your Password!", "success");
             navigate("/login");
@@ -241,44 +230,40 @@ const ForgotPassword = () => {
       </FormBackground>
       {showModal && (
         <ModalParentDiv>
-          <DivCloseButton>
-            <CloseRoundedIcon onClick={handleSubmitOTP} />
-          </DivCloseButton>
           <OtpInputModal
             className="card"
             style={{ width: "20%", height: "50vh" }}>
-            <div style={{ marginBottom: "2rem", display: "grid" }}>
-              <TableHeading>Enter OTP</TableHeading>
-            </div>
-            <div>OTP is sent on your email id</div>
+
+            <DivCloseButton>
+              <CloseRoundedIcon onClick={() => { setShowModal(false) }} />
+            </DivCloseButton>
+            <TableHeading>Enter OTP</TableHeading>
+
+            <p>OTP is sent on your Email</p>
             <OTPInput
               value={otp}
               onChange={setOtp}
-              style={{ marginTop: "1rem" }}
               autoFocus
-              OTPLength={4}
+              OTPLength={6}
               otpType="number"
               disabled={false}
               secure
             />
 
-            <i>
               <ResendOTP
                 style={{ color: "green" }}
                 value="Resend"
                 inputStyles={{}}
                 className="abc"
-                maxTime={10}
+                maxTime={120}
                 onResendClick={() => onResend()}
-              /></i>
-            <FlexDiv style={{ marginBottom: "2rem" }}>
+              />
+            <FlexDiv>
               {!flag && errorOtp && <ErrorMessage>{errorOtp}</ErrorMessage>}
             </FlexDiv>
-            <span style={{ marginBottom: "1rem" }}>
-              <SubmitButton onClick={(e) => handleSubmitOTP(e)}>
-                Submit
-              </SubmitButton>
-            </span>
+            <SubmitButton onClick={(e) => handleSubmitOTP(e)}>
+              Submit
+            </SubmitButton>
           </OtpInputModal>
         </ModalParentDiv>
       )}

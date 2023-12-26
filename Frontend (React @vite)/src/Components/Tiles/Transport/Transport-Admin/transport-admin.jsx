@@ -59,6 +59,8 @@ const useStyles = makeStyles((theme) => ({
 
 
 function TransportAdmin() {
+    const Base_URL = import.meta.env.VITE_BASE_URL;
+  
     const { id } = useParams();               //admin's id from url
     const classes = useStyles();
     const [page, setPage] = useState(0);
@@ -89,7 +91,7 @@ function TransportAdmin() {
     }, [])
 
     const fetchData = async () => {
-        await axios.get(`/api/transport-request`, {
+        await axios.get(`${Base_URL}/api/transport-request`, {
             headers: {
                 'Authorization': `Bearer ${localStorage.token}`          //for verification (IMP)
             }
@@ -108,7 +110,7 @@ function TransportAdmin() {
     const [transpReqDetails, setTranspReqDetails] = useState({})
 
     const viewTranspDetails = async (uid) => {
-        await axios.get(`/api/transport-request/${uid}`, {
+        await axios.get(`${Base_URL}/api/transport-request/${uid}`, {
             headers: {
                 'Authorization': `Bearer ${localStorage.token}`          //for verification (IMP)
             }
@@ -131,7 +133,7 @@ function TransportAdmin() {
             rejectReason: '-',
             status: 'Approved',                                //this is updated
         }
-        await axios.put(`/api/transport-request/${uid}`, reqObj, {
+        await axios.put(`${Base_URL}/api/transport-request/${uid}`, reqObj, {
             headers: {
                 'Authorization': `Bearer ${localStorage.token}`          //for verification (IMP)
             }
@@ -175,7 +177,7 @@ function TransportAdmin() {
             status: 'Rejected',                                            //this is updated
         }
 
-        await axios.put(`/api/transport-request/${transpReqid}`, reqObj, {
+        await axios.put(`${Base_URL}/api/transport-request/${transpReqid}`, reqObj, {
             headers: {
                 'Authorization': `Bearer ${localStorage.token}`          //for verification (IMP)
             }

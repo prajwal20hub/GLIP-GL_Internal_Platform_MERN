@@ -23,6 +23,8 @@ import {
 import GLlogo from '../../../Utils/Images/GL-logo.jpg'
 
 const ResetPassword = () => {
+  const Base_URL = import.meta.env.VITE_BASE_URL;
+  
   const { id } = useParams();
   const navigate = useNavigate();
 
@@ -70,7 +72,7 @@ const ResetPassword = () => {
       setError(resetPassError);
     }
     else {
-      await axios.put(`/api/users/reset-password`, { password }, {
+      await axios.put(`${Base_URL}/api/users/reset-password`, { password }, {
         headers: {
           'Authorization': `Bearer ${localStorage.token}`
         }

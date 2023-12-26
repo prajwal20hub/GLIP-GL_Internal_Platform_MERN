@@ -6,10 +6,9 @@ const router = express.Router()
 
 router.post('/register', createUser)
 router.post('/login', loginUser)
-router.get('/', getUsers)           //not added token_validator as we use this api in forgot_password
-router.put('/forgot-password/:id', forgotPassword) 
+router.put('/forgot-password/:id', forgotPassword)
 
-
+router.get('/', tokenValidation, getUsers)          
 router.get('/currentUser', tokenValidation, currentUser)
 router.get('/managers', tokenValidation, getManagers)
 router.delete('/:id', tokenValidation, deleteUser)           //by admin

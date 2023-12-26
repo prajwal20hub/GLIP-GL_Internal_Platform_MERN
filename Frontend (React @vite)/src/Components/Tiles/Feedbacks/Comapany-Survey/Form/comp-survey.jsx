@@ -21,6 +21,8 @@ import FormControlLabel from "@mui/material/FormControlLabel";
 import Swal from "sweetalert2";
 
 const CompSurvey = () => {
+    const Base_URL = import.meta.env.VITE_BASE_URL;
+  
     const navigate = useNavigate();
     var { id } = useParams();
     const [error, setError] = useState(null);
@@ -54,7 +56,7 @@ const CompSurvey = () => {
         }
         else {
             setError(null);
-            await axios.post("/api/company-survey", compSurveyData, {
+            await axios.post(`${Base_URL}/api/company-survey`, compSurveyData, {
                 headers: {
                     'Authorization': `Bearer ${localStorage.token}`
                 }

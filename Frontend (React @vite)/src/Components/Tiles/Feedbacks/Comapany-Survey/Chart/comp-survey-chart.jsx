@@ -13,7 +13,9 @@ import {
 } from "./comp-survey-chart.styled";
 import { FormHeading } from '../../Feedback-Form/Form/feed-form.style';
 
-function RatingChart() {
+const RatingChart = () => {
+  const Base_URL = import.meta.env.VITE_BASE_URL;
+  
   const [ratingsData, setRatingsData] = useState([]);
   const [selectedQuestion, setSelectedQuestion] = useState('empSatisfaction');
 
@@ -22,7 +24,7 @@ function RatingChart() {
   }, []);
 
   const fetchData = async () => {
-    await axios.get('/api/company-survey', {
+    await axios.get(`${Base_URL}/api/company-survey`, {
       headers: {
         'Authorization': `Bearer ${localStorage.token}`
       }

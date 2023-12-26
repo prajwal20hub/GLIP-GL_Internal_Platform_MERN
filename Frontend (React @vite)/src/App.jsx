@@ -1,6 +1,7 @@
 import React from 'react';
 import './App.css'
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 import Register from './Components/Authentication/Register/register';
 import Login from './Components/Authentication/Login/login';
 import ForgotPassword from './Components/Authentication/Fogot_Password/forgot-password';
@@ -17,8 +18,8 @@ import LeaveManageEmp from './Components/Tiles/Leave-Management/Leave-Management
 import AccessPrivilegeAdmin from './Components/Tiles/Access-Privilege/Access-Privilege-Admin/access-privilege-admin';
 import AccessPrivilegeEmp from './Components/Tiles/Access-Privilege/Access-Privilege-Employee/access-privilege-emp';
 
-import EmpListAdmin from './Components/Tiles/Employee-List/Employee-List-Admin/emp-list-admin';
-import EmpListEmp from './Components/Tiles/Employee-List/Employee-List-Emp/employee-list-emp';
+import TaskManagementAdmin from './Components/Tiles/Task-Management/Task-Management-Admin/task-management-admin';
+import TaskManagementEmp from './Components/Tiles/Task-Management/Task-Management-Emp/task-management-emp';
 
 import TransportEmp from './Components/Tiles/Transport/Transport-Employee/transport-emp';
 import TransportAdmin from './Components/Tiles/Transport/Transport-Admin/transport-admin';
@@ -40,58 +41,54 @@ import TechSurveyChart from './Components/Tiles/Feedbacks/Technology-Survey/Char
 
 import AlreadyFill from './Components/Tiles/Feedbacks/Already-Filled/already-filled';
 
-function App() {
+const App = () => {
+  const isloggedin = useSelector((state) => state.isloggedin);
+
   return (
-    <>
-      <BrowserRouter>
-        <Routes>
-          <Route path='/' element={<Home />} />
-          <Route path='/register' element={<Register />} />
-          <Route path='/login' element={<Login />} />
-          <Route path='/forgotpassword' element={<ForgotPassword />} />
-          <Route path='/deactivate/:id' element={<Deactivate />} />
-          <Route path='/dashboard/:id' element={<Dashboard />} />
-          <Route path='/resetpassword/:id' element={<ResetPassword />} />
-          <Route path='*' element={<NotFound />} />
-          <Route path='/dashboard/access-denied' element={<AccessDenied />} />
+    <BrowserRouter>
+      <Routes>
+        <Route path='/' element={<Home />} />
 
-          {/* Tiles */}
-          <Route path='/dashboard/accessemp/:id' element={<AccessPrivilegeEmp />} />
-          <Route path='/dashboard/admin-access-previleges/:id' element={<AccessPrivilegeAdmin />} />
+        {/* Protected Routes */}
+        <Route path='/register' element={!isloggedin ? <Register /> : <AccessDenied />} /> 
+        <Route path='/login' element={!isloggedin ?<Login /> : <AccessDenied />} /> 
+        <Route path='/forgotpassword' element={!isloggedin ? <ForgotPassword /> : <AccessDenied />} /> 
+        
+        <Route path='/deactivate/:id' element={<Deactivate />} />
+        <Route path='/dashboard/:id' element={<Dashboard />} /> 
+        <Route path='/resetpassword/:id' element={<ResetPassword />} /> 
+        <Route path='*' element={<NotFound />} /> 
+       
+        {/* Tiles  */}
+        <Route path='/dashboard/access-privilege-emp/:id' element={<AccessPrivilegeEmp />} /> 
+        <Route path='/dashboard/access-privilege-admin/:id' element={<AccessPrivilegeAdmin />} /> 
 
-          <Route path='/dashboard/emplistemp/:id' element={<EmpListEmp />} />
-          <Route path='/dashboard/emplistadmin/:id' element={<EmpListAdmin />} />
+        <Route path='/dashboard/task-manage-emp/:id' element={<TaskManagementEmp />} /> 
+        <Route path='/dashboard/task-manage-admin/:id' element={<TaskManagementAdmin />} /> 
 
-          <Route path='/dashboard/transpemp/:id' element={<TransportEmp />} />
-          <Route path='/dashboard/admin-transport/:id' element={<TransportAdmin />} />
+        <Route path='/dashboard/transport-manage-emp/:id' element={<TransportEmp />} /> 
+        <Route path='/dashboard/transport-manage-admin/:id' element={<TransportAdmin />} /> 
 
-          <Route path='/dashboard/leave-manage-emp/:id' element={<LeaveManageEmp />} />
-          <Route path='/dashboard/leave-manage-admin/:id' element={<LeaveManageAdmin />} />
+        <Route path='/dashboard/leave-manage-emp/:id' element={<LeaveManageEmp />} /> 
+        <Route path='/dashboard/leave-manage-admin/:id' element={<LeaveManageAdmin />} /> 
 
-          <Route path='/dashboard/payslips-emp/:id' element={<PayslipsEmp />} />
-          <Route path='/dashboard/payslips-admin/:id' element={<PayslipsAdmin />} />
+        <Route path='/dashboard/payslips-emp/:id' element={<PayslipsEmp />} />
+        <Route path='/dashboard/payslips-admin/:id' element={<PayslipsAdmin />} />
 
+        <Route path="/dashboard/feedback-home/:id" element={<FeedbackHome />} />
 
-          <Route path="/dashboard/feedback-home/:id" element={<FeedbackHome />} />
+        <Route path="/dashboard/feedback-form/:id" element={<FeedForm />} />
+        <Route path="/dashboard/feedback-chart/:id" element={<FeedChart />} />
 
-          <Route path="/dashboard/feedback-form/:id" element={<FeedForm />} />
-          <Route path="/dashboard/feedback-chart/:id" element={<FeedChart />} />
+        <Route path="/dashboard/company-survey/:id" element={<CompSurvey />} />
+        <Route path="/dashboard/company-survey-chart/:id" element={<CompSurveyChart />} />
 
+        <Route path="/dashboard/tech-survey/:id" element={<TechSurvey />} />
+        <Route path="/dashboard/tech-survey-chart/:id" element={<TechSurveyChart />} />
 
-          <Route path="/dashboard/company-survey/:id" element={<CompSurvey />} />
-          <Route path="/dashboard/company-survey-chart/:id" element={<CompSurveyChart />} />
-
-
-          <Route path="/dashboard/tech-survey/:id" element={<TechSurvey />} />
-          <Route path="/dashboard/tech-survey-chart/:id" element={<TechSurveyChart />} />
-
-          <Route path="/dashboard/already-filled/:id" element={<AlreadyFill />} />
-
-
-        </Routes>
-      </BrowserRouter>
-
-    </>
+        <Route path="/dashboard/already-filled/:id" element={<AlreadyFill />} />
+      </Routes>
+    </BrowserRouter>
   );
 }
 

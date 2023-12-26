@@ -1,7 +1,7 @@
-import React, { useState, useEffect, useRef } from 'react'
-import { NavLink } from 'react-router-dom'
+import React, { useState, useEffect, useRef } from 'react';
+import { NavLink } from 'react-router-dom';
 import { useSelector } from 'react-redux';
-import GLlogo from '../../Utils/Images/GL-logo.jpg'
+import GLlogo from '../../Utils/Images/GL-logo.jpg';
 import SettingsRoundedIcon from '@mui/icons-material/SettingsRounded';
 import LogoutIcon from '@mui/icons-material/Logout';
 
@@ -22,7 +22,17 @@ import {
 const Navbar = () => {
     const isloggedin = useSelector(state => state.isloggedin);
     var currUser = useSelector((state) => state.currUser);
-    var initials = useSelector((state) => state.initials);
+    var initials = useSelector((state) => state.initials);  //Login icon Initials(Firstname and lastname)
+
+    const [dashLink, setDashLink] = useState(true);
+
+    useEffect(() => {
+        let pathName = window.location.pathname;          // '/dashboard/user_id' --> '/' count is 2
+        let count = pathName.split('/').length - 1;
+        (pathName.includes('dashboard') && count === 2 && 
+            setDashLink(false)
+        )
+    }, [])
 
     const [isOpen, setIsOpen] = useState(false);
     const windowRef = useRef();
@@ -67,26 +77,37 @@ const Navbar = () => {
 
                         {isOpen && (
                             <SettingDiv ref={windowRef} className="window">
-                                <div class="card">
+                                <div className="card">
                                     <div
-                                        class="card-body"
+                                        className="card-body"
                                         style={{ borderRadius: "50%", height: "80%" }}>
                                         <Text
-                                            class="card-title" >
+                                            className="card-title" >
                                             <b>{currUser.fname} {currUser.lname}</b>
                                         </Text>
                                         <Text
-                                            class="card-title"
+                                            className="card-title"
                                             style={{ fontSize: "0.8rem" }}>
                                             {currUser.email}
                                         </Text>
                                         <Text
-                                            class="card-title"
+                                            className="card-title"
                                             style={{ fontSize: "0.9rem" }}>
-                                            Emp Id: {currUser.empID}
+                                            Emp ID: {currUser.empID}
                                         </Text>
-                                        <br />
 
+                                        {dashLink ?
+                                            <NavLink
+                                                to={`/dashboard/${currUser.id}`}
+                                                style={{ textDecoration: "none", color: "#000" }}>
+                                                <Text
+                                                    className="card-title"
+                                                    style={{ fontSize: "0.9rem", paddingTop: '10px' }}>
+                                                    Go to Dashboard
+                                                </Text>
+                                            </NavLink> :
+                                            <hr />
+                                        }
                                         <NavLink
                                             to={`/resetpassword/${currUser.id}`}
                                             style={{ textDecoration: "none", color: "#000" }}>
@@ -100,7 +121,7 @@ const Navbar = () => {
                                             </NavLinkSpan>
                                         </NavLink>
                                         <hr />
-                                        <p class="card-text" >
+                                        <p className="card-text" >
                                             <NavLink
                                                 to="#"
                                                 style={{ textDecoration: "none", color: "#000" }}>

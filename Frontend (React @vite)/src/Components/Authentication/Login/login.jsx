@@ -24,6 +24,8 @@ import {
 import GLlogo from '../../../Utils/Images/GL-logo.jpg'
 
 const Login = () => {
+  const Base_URL = import.meta.env.VITE_BASE_URL;
+
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -68,7 +70,7 @@ const Login = () => {
     }
     else {
       setError(null);
-      await axios.post('/api/users/login', user)
+      await axios.post(`${Base_URL}/api/users/login`, user)
         .then((res)=> {
           localStorage.token = res.data.accesstoken;   //set jwt token to localstorage
           dispatch({type: 'LOGIN'});

@@ -14,6 +14,8 @@ import {
 Chart.register(RadialLinearScale, ArcElement, Tooltip, Legend);
 
 const TechSurveyChart = () => {
+  const Base_URL = import.meta.env.VITE_BASE_URL;
+  
   const [techData, setTechData] = useState([]);
 
   useEffect(() => {
@@ -22,7 +24,7 @@ const TechSurveyChart = () => {
   }, []);
 
   const fetchData = () => {
-    axios.get(`/api/tech-survey`, {
+    axios.get(`${Base_URL}/api/tech-survey`, {
       headers: {
         'Authorization': `Bearer ${localStorage.token}`
       }

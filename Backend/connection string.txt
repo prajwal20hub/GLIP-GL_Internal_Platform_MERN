@@ -1,1 +1,0 @@
-mongodb+srv://prajwal:prajwal2001@glipcluster.r8rxnzn.mongodb.net/GLIP_Backend

@@ -9,7 +9,8 @@ import {
 } from './feed-chart.style'
 
 const FeedChart = () => {
-
+  const Base_URL = import.meta.env.VITE_BASE_URL;
+  
   const [data, setData] = useState({
     Admin: 0,
     Developer: 0,
@@ -27,7 +28,7 @@ const FeedChart = () => {
   }, [])
 
   const fetchData = async () => {
-    await axios.get('/api/feedback', {
+    await axios.get(`${Base_URL}/api/feedback`, {
       headers: {
         'Authorization': `Bearer ${localStorage.token}`
       }

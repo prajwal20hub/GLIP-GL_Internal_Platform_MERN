@@ -24,6 +24,8 @@ import {
 } from "./footer.style";
 
 const Footer = () => {
+    const Base_URL = import.meta.env.VITE_BASE_URL;
+  
     const isloggedin = useSelector((state)=> state.isloggedin)
 
     const [modalval, setmodalval] = useState(false);
@@ -43,7 +45,7 @@ const Footer = () => {
     }, [])
 
     const fetchData = async () => {
-        await axios.get(`/api/total-registrations`)
+        await axios.get(`${Base_URL}/api/total-registrations`)
             .then((res) => {
                 setTotalReg(res.data.total_registrations)
                 dispatch({

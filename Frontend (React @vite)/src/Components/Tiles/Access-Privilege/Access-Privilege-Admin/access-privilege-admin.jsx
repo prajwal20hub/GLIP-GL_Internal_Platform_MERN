@@ -55,7 +55,9 @@ const useStyles = makeStyles((theme) => ({
     }
 }));
 
-function AccessPrivilegeAdmin() {
+const AccessPrivilegeAdmin = () => {
+    const Base_URL = import.meta.env.VITE_BASE_URL;
+  
     const { id } = useParams();               //admin's id from url
     const classes = useStyles();
     const [page, setPage] = useState(0);
@@ -86,7 +88,7 @@ function AccessPrivilegeAdmin() {
     }, [])
 
     const fetchData = async () => {
-        await axios.get(`/api/access-request`, {
+        await axios.get(`${Base_URL}/api/access-request`, {
             headers: {
                 'Authorization': `Bearer ${localStorage.token}`          //for verification (IMP)
             }
@@ -102,7 +104,7 @@ function AccessPrivilegeAdmin() {
     const [accessDetails, setAccessDetails] = useState({})
 
     const viewAccessDetails = (uid) => {
-        axios.get(`/api/access-request/${uid}`, {
+        axios.get(`${Base_URL}/api/access-request/${uid}`, {
             headers: {
                 'Authorization': `Bearer ${localStorage.token}`          //for verification (IMP)
             }
@@ -125,13 +127,13 @@ function AccessPrivilegeAdmin() {
             rejectReason: '-',
             status: 'Approved',                                //this is updated
         }
-        await axios.put(`/api/access-request/${uid}`, reqObj, {
+        await axios.put(`${Base_URL}/api/access-request/${uid}`, reqObj, {
             headers: {
                 'Authorization': `Bearer ${localStorage.token}`          //for verification (IMP)
             }
         })
             .then(async (res) => {
-                await axios.put(`/api/users/update-user_type/${res.data.empID}`, {
+                await axios.put(`${Base_URL}/api/users/update-user_type/${res.data.empID}`, {
                     user_type: res.data.requestFor
                 }, {
                     headers: {
@@ -180,7 +182,7 @@ function AccessPrivilegeAdmin() {
             rejectReason: rejectReason,                               //this is updated
             status: 'Rejected'                                            //this is updated
         }
-        await axios.put(`/api/access-request/${accessReqid}`, reqObj, {
+        await axios.put(`${Base_URL}/api/access-request/${accessReqid}`, reqObj, {
             headers: {
                 'Authorization': `Bearer ${localStorage.token}`          //for verification (IMP)
             }

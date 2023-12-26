@@ -47,6 +47,8 @@ import {
 import Navbar from '../../../Navbar/navbar'
 
 const PayslipsEmp = () => {
+    const Base_URL = import.meta.env.VITE_BASE_URL;
+  
     const [selectedDate, setSelectedDate] = useState(new Date());
     const [yearCheck, setyearCheck] = useState(false);
     const [checkedVal, setcheckedVal] = useState(true);
@@ -65,7 +67,7 @@ const PayslipsEmp = () => {
     }, []);
 
     const fetchData = async () => {
-        await axios.get("/api/payslip/curr_emp", {
+        await axios.get(`${Base_URL}/api/payslip/curr_emp`, {
             headers: {
                 'Authorization': `Bearer ${localStorage.token}`
             }

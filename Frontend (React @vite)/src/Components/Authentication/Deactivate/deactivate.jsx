@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { useNavigate, Link, useParams } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import axios from 'axios';
 import Swal from "sweetalert2";
 import validationDeactivate from './validationDeactivate';
@@ -20,7 +20,8 @@ import {
 import GLlogo from '../../../Utils/Images/GL-logo.jpg'
 
 const Deactivate = () => {
-  const navigate = useNavigate();
+  const Base_URL = import.meta.env.VITE_BASE_URL;
+
   const { id } = useParams();
   const currUser = useSelector((state) => state.currUser);
 
@@ -72,7 +73,7 @@ const Deactivate = () => {
     }
     else {
       setError(null);
-      await axios.delete(`/api/users/${id}`, {
+      await axios.delete(`${Base_URL}/api/users/${id}`, {
         headers: {
           'Authorization': `Bearer ${localStorage.token}`          //for verification (IMP)
         }
@@ -107,7 +108,7 @@ const Deactivate = () => {
       </Link>
       <FormContainer>
         <FormHeading> Deactivate </FormHeading>
-        {formProp.map((obj, index) => (
+        {formProp.map((obj) => (
           <>
             <FormLabel name={obj.name}>{obj.label}</FormLabel><FormAstric>*</FormAstric>
             <FormInput type="text" {...obj} />

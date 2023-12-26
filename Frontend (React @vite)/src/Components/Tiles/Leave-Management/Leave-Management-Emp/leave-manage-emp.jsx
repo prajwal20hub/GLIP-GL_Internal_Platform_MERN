@@ -82,6 +82,8 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const LeaveManageEmp = () => {
+  const Base_URL = import.meta.env.VITE_BASE_URL;
+  
   const classes = useStyles();
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
@@ -129,14 +131,14 @@ const LeaveManageEmp = () => {
     }
   });
 
-  const { empID, leaveType, startDate, endDate, duration, isHalfDay, halfDayDate, reason, actionBy, rejectReason, status } = leaveRequest;
+  const { empID, leaveType, startDate, endDate, duration, isHalfDay, halfDayDate, reason} = leaveRequest;
 
   useEffect(() => {
     fetchdata();
   }, [])
 
   const fetchdata = async () => {
-    await axios.get(`/api/leaves-remain/empID/${empID}`, {
+    await axios.get(`${Base_URL}/api/leaves-remain/empID/${empID}`, {
       headers: {
         'Authorization': `Bearer ${localStorage.token}`          //for verification (IMP)
       }
@@ -148,7 +150,7 @@ const LeaveManageEmp = () => {
         console.log(err)
       });
 
-    await axios.get(`/api/leave-request/empID/${empID}`, {
+    await axios.get(`${Base_URL}/api/leave-request/empID/${empID}`, {
       headers: {
         'Authorization': `Bearer ${localStorage.token}`          //for verification (IMP)
       }
@@ -174,7 +176,7 @@ const LeaveManageEmp = () => {
   const [leaveDetails, setLeaveDetails] = useState({})
 
   const viewLeaveDetails = async (uid) => {
-    await axios.get(`/api/leave-request/${uid}`, {
+    await axios.get(`${Base_URL}/api/leave-request/${uid}`, {
       headers: {
         'Authorization': `Bearer ${localStorage.token}`          //for verification (IMP)
       }
@@ -210,7 +212,7 @@ const LeaveManageEmp = () => {
     }
     else {
       setError(null);
-      await axios.post("/api/leave-request", leaveRequest, {
+      await axios.post(`${Base_URL}/api/leave-request`, leaveRequest, {
         headers: {
           'Authorization': `Bearer ${localStorage.token}`          //for verification (IMP)
         }
@@ -267,7 +269,7 @@ const LeaveManageEmp = () => {
     }
   ]
 
-  const LeavesRecordHeaders = ['S No.', 'Leave ID', 'Start Date', 'End Date', 'Half Day Leaves', 'Type of Leave', 'View Details', 'Status'];
+  const LeavesRecordHeaders = ['S No.', 'Start Date', 'End Date', 'Half Day Leaves', 'Type of Leave', 'View Details', 'Status'];
 
   const datesData = [
     {
@@ -329,10 +331,6 @@ const LeaveManageEmp = () => {
   }, [startDate, endDate, halfDayDate, isHalfDay])
 
   const LeavesDetailsHeaders = [
-    {
-      header: 'Leave ID',
-      value: leaveDetails?._id
-    },
     {
       header: 'Leave Type',
       value: leaveDetails?.leaveType
@@ -560,10 +558,6 @@ const LeaveManageEmp = () => {
                             fontWeight: "bold",
                           }}>
                           {index + 1}
-                        </TableCell>
-
-                        <TableCell align="center">
-                          {obj._id}
                         </TableCell>
 
                         <TableCell align="center">

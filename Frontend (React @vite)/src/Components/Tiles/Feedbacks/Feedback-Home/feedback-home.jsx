@@ -14,6 +14,8 @@ import { useParams } from 'react-router-dom'
 import { useSelector } from 'react-redux';
 
 const FeedbackHome = () => {
+    const Base_URL = import.meta.env.VITE_BASE_URL;
+  
     const { id } = useParams();
     const currUser = useSelector((state) => state.currUser);
 
@@ -30,7 +32,7 @@ const FeedbackHome = () => {
 
 //from token_validation middleware's decoded data we get user's id in backend so no need to send user's id in url
        
-        await axios.get(`/api/company-survey/user_id`, {            
+        await axios.get(`${Base_URL}/api/company-survey/user_id`, {            
             headers: {
                 'Authorization': `Bearer ${localStorage.token}`
             }
@@ -40,7 +42,7 @@ const FeedbackHome = () => {
             })
 
 //-----------------------------------------------------------------------------
-        await axios.get(`/api/tech-survey/user_id`, {
+        await axios.get(`${Base_URL}/api/tech-survey/user_id`, {
             headers: {
                 'Authorization': `Bearer ${localStorage.token}`
             }

@@ -25,6 +25,8 @@ import Select from '@mui/material/Select';
 import ValidateFeedForm from './validate-feed-form';
 
 const FeedForm = () => {
+  const Base_URL = import.meta.env.VITE_BASE_URL;
+  
   const { id } = useParams();
   const [users, setUsers] = useState([]);
   const [selects, setSelects] = useState([]);
@@ -44,7 +46,7 @@ const FeedForm = () => {
   }, [])
 
   const fetchData = async () => {
-    await axios.get(`/api/users`, {
+    await axios.get(`${Base_URL}/api/users`, {
       headers: {
         'Authorization': `Bearer ${localStorage.token}`
       }
@@ -79,7 +81,7 @@ const FeedForm = () => {
       }
       else {
         setError(null);
-        axios.post("/api/feedback", feedData, {
+        axios.post(`${Base_URL}/api/feedback`, feedData, {
           headers: {
             'Authorization': `Bearer ${localStorage.token}`
           }
@@ -159,7 +161,7 @@ const FeedForm = () => {
 
   useEffect(() => {
     if (empFeedName) {
-      axios.get(`/api/feedback/empfeed/${empFeedName}`, {
+      axios.get(`${Base_URL}/api/feedback/empfeed/${empFeedName}`, {
         headers: {
           'Authorization': `Bearer ${localStorage.token}`
         }

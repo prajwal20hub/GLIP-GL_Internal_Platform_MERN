@@ -5,7 +5,7 @@ import axios from "axios";
 import Navbar from "../Navbar/navbar";
 import Footer from "../Footer/footer";
 import NameInitials from "./name-initials";
-import BackToTop from '../Home/back-to-top'
+import BackToTop from '../Home/back-to-top';
 import {
     UserDetails,
     Quote,
@@ -15,6 +15,8 @@ import {
 } from "./dashboard.styles";
 
 const Dashboard = () => {
+    const Base_URL = import.meta.env.VITE_BASE_URL;
+
     const dispatch = useDispatch();
     const navigate = useNavigate()
     const { id } = useParams();
@@ -25,7 +27,7 @@ const Dashboard = () => {
     }, [])
 
     const fetchdata = async () => {
-        await axios.get(`/api/users/currentUser`, {
+        await axios.get(`${Base_URL}/api/users/currentUser`, {
             headers: {
                 'Authorization': `Bearer ${localStorage.token}`          //for verification (IMP)
             }
@@ -57,14 +59,14 @@ const Dashboard = () => {
         {
             label: "Access Privileges",
             link: currUser?.user_type === 'Admin' ?
-                `/dashboard/admin-access-previleges/${id}` :
-                `/dashboard/accessemp/${id}`,
+                `/dashboard/access-privilege-admin/${id}` :
+                `/dashboard/access-privilege-emp/${id}`,
         },
         {
             label: "Transport",
             link: currUser?.user_type === 'Transport Admin' ?
-                `/dashboard/admin-transport/${id}` :
-                `/dashboard/transpemp/${id}`
+                `/dashboard/transport-manage-admin/${id}` :
+                `/dashboard/transport-manage-emp/${id}`
         },
         {
             label: "Payslips",
@@ -75,12 +77,11 @@ const Dashboard = () => {
     ];
     var tilesRow2 = [
         {
-            label: "Employees List",
-            link: (currUser?.user_type === 'HR Admin' || currUser?.user_type === 'Manager Admin') ?
-                `/dashboard/emplistadmin/${id}` :
-                `/dashboard/emplistemp/${id}`
+            label: "Task Management",
+            link: (currUser?.designation === 'Manager' || currUser?.user_type === 'Manager Admin') ?
+                `/dashboard/task-manage-admin/${id}` :
+                `/dashboard/task-manage-emp/${id}`
         },
-
         {
             label: "Leave Management",
             link: (currUser?.user_type === 'HR Admin' || currUser?.user_type === 'Manager Admin') ?
@@ -104,7 +105,7 @@ const Dashboard = () => {
                 <UserDetails style={{ marginLeft: "50px" }}>
                     <i>your Emp Id is: {empID}</i>
                 </UserDetails>
-                <div className="row" style={{ boxSizing: "border-box", marginTop: "75px" }}>
+                <div className="row" style={{ boxSizing: "border-box", marginLeft: "20px", marginTop: "75px" }}>
                     <Quote className="col-md-3 mb-4 mt-3 pt-4">
                         "All our dreams can come true if we have the courage
                         to pursue them." <br />- Walt Disney

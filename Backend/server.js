@@ -1,34 +1,34 @@
 const express = require('express');
+const cors = require('cors');
 require('dotenv').config();
 const port = process.env.PORT;
 const dbConnect = require('./config/db-connect.js');
 const errorHandler = require('./middlewares/error-handler.js');
-
+const loggerHandler = require('./middlewares/logger-handler.js');
 
 dbConnect();
 
 const app = express();
+app.use(loggerHandler);
 
-app.use(express.json());   
+app.use(cors());
 
+app.use(express.json());
+
+// app.use(express.static('dist'));
 
 app.use('/api/users', require('./routes/user-routes.js'));
 app.use('/api', require('./routes/other-routes.js'));
 app.use('/api/leaves-remain', require('./routes/leave-remain-routes.js'));
-
 app.use('/api/access-request', require('./routes/access-routes.js'))
-
-app.use('/api/transport-request', require('./routes/transport-routes.js'))
-
-app.use('/api/leave-request', require('./routes/leave-request-routes.js'))
-
-app.use('/api/tech-survey', require('./routes/tech-survey-routes.js'))
-
-app.use('/api/company-survey', require('./routes/company-survey-routes.js'))
-
-app.use('/api/feedback', require('./routes/feedback-routes.js'))
-
-app.use('/api/payslip', require('./routes/payslip-routes.js'))
+app.use('/api/transport-request', require('./routes/transport-routes.js'));
+app.use('/api/leave-request', require('./routes/leave-request-routes.js'));
+app.use('/api/tech-survey', require('./routes/tech-survey-routes.js'));
+app.use('/api/company-survey', require('./routes/company-survey-routes.js'));
+app.use('/api/feedback', require('./routes/feedback-routes.js'));
+app.use('/api/payslip', require('./routes/payslip-routes.js'));
+app.use('/api/task', require('./routes/task-routes.js'));
+app.use('/api/otp', require('./routes/otp-routes.js'));
 
 app.use(errorHandler);
 

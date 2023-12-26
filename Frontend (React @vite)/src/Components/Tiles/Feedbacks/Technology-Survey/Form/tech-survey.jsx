@@ -22,6 +22,8 @@ import {
 import ValidateTechSurvey from "./validate-tech-survey";
 
 const TechSurvey = () => {
+  const Base_URL = import.meta.env.VITE_BASE_URL;
+  
   const navigate = useNavigate();
   const { id } = useParams();
   // const currUser = useSelector((state) => state.currUser);
@@ -55,7 +57,7 @@ const TechSurvey = () => {
     }
     else {
       setError(null);
-      await axios.post("/api/tech-survey", techData, {
+      await axios.post(`${Base_URL}/api/tech-survey`, techData, {
         headers: {
           'Authorization': `Bearer ${localStorage.token}`
         }

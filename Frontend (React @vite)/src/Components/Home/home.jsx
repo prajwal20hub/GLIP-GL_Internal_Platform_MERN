@@ -21,17 +21,17 @@ const Home = () => {
     const carousal = [
         {
             'src': corousel1,
-            'class': "d-block w-100",
+            'classNameName': "d-block w-100",
             'alt': "Image not Available"
         },
         {
             'src': corousel2,
-            'class': "d-block w-100",
+            'className': "d-block w-100",
             'alt': "Image not Available"
         },
         {
             'src': corousel3,
-            'class': "d-block w-100",
+            'className': "d-block w-100",
             'alt': "Image not Available"
         }
     ]
@@ -41,7 +41,7 @@ const Home = () => {
             'type': "button",
             'data-bs-target': "#carouselExampleCaptions",
             'data-bs-slide-to': "0",
-            'class': "active",
+            'className': "active",
             'aria-current': "true",
             'aria-label': "Slide 1"
         },
@@ -65,19 +65,19 @@ return (
             <DivMainHomeCarousel>
                 <div
                     id="carouselExampleCaptions"
-                    class="carousel slide"
+                    className="carousel slide"
                     data-bs-ride="carousel"
                 >
-                    <div class="carousel-indicators">       
+                    <div className="carousel-indicators">       
                     {carousButton.map((cbtn)=> (
                          <button {...cbtn}></button>
                     ))}
                     </div>
 
-                    <div class="carousel-inner">
+                    <div className="carousel-inner">
                     {carousal.map((car,index) => (
                             <div
-                                class= {index===0 ? "carousel-item active" :  "carousel-item"}
+                                className= {index===0 ? "carousel-item active" :  "carousel-item"}
                                 data-bs-interval="5000">
                                 <ImgCarousel {...car} />
                             </div>

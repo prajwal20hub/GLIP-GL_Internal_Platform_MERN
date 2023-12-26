@@ -72,6 +72,8 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const TransportEmp = () => {
+  const Base_URL = import.meta.env.VITE_BASE_URL;
+  
   const classes = useStyles();
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
@@ -132,7 +134,7 @@ const TransportEmp = () => {
   }, []);                          //only once when load
 
   const fetchData = async () => {
-    await axios.get(`/api/transport-request/empID/${empID}`, {
+    await axios.get(`${Base_URL}/api/transport-request/empID/${empID}`, {
       headers: {
         'Authorization': `Bearer ${localStorage.token}`          //for verification (IMP)
       }
@@ -145,7 +147,7 @@ const TransportEmp = () => {
         console.log(err)
       });
 
-    await axios.get(`/api/locations`, {
+    await axios.get(`${Base_URL}/api/locations`, {
       headers: {
         'Authorization': `Bearer ${localStorage.token}`          //for verification (IMP)
       }
@@ -162,7 +164,7 @@ const TransportEmp = () => {
   const [transpDetails, setTranspDetails] = useState({})
 
   const viewTranspDetails = async (uid) => {
-    await axios.get(`/api/transport-request/${uid}`, {
+    await axios.get(`${Base_URL}/api/transport-request/${uid}`, {
       headers: {
         'Authorization': `Bearer ${localStorage.token}`          //for verification (IMP)
       }
@@ -220,14 +222,14 @@ const TransportEmp = () => {
     }
     else {
       setError(null);
-      await axios.post("/api/transport-request", transRequest, {
+      await axios.post(`${Base_URL}/api/transport-request`, transRequest, {
         headers: {
           'Authorization': `Bearer ${localStorage.token}`          //for verification (IMP)
         }
       })
         .then((res) => {
           Swal.fire("Congrats", "You have sent Transport Request Successfully.", "success");
-          localStorage.removeItem('transpData');   //clear Access Privilege Form Data
+          localStorage.removeItem('transpData');   //clear Transport Request Form Data
           navigate(`/dashboard/${id}`);
         })
         .catch((err) => {
@@ -294,13 +296,9 @@ const TransportEmp = () => {
   const returnTripProp = ['Yes', 'No'];
   const pickupLocOpts = ['Home', 'Office'];
 
-  const TranspRecordHeaders = ['S No.', 'Request ID', 'Location', 'Start Date', 'End Date', 'View Details', 'Status'];
+  const TranspRecordHeaders = ['S No.', 'Location', 'Start Date', 'End Date', 'View Details', 'Status'];
 
   const TranspDetailsHeaders = [
-    {
-      header: 'Access Request ID',
-      value: transpDetails?._id
-    },
     {
       header: 'Location',
       value: transpDetails?.location
@@ -363,7 +361,7 @@ const TransportEmp = () => {
       returnTrip: '',
       weekDays: ''
     })
-    localStorage.removeItem('transpData');   //clear Access Privilege Form Data
+    localStorage.removeItem('transpData');   //clear Transport Request Form Data
   }
 
   const onSave = () => {
@@ -537,10 +535,6 @@ const TransportEmp = () => {
                             fontWeight: "bold",
                           }}>
                           {index + 1}
-                        </TableCell>
-
-                        <TableCell align="center">
-                          {obj._id}
                         </TableCell>
 
                         <TableCell align="center">

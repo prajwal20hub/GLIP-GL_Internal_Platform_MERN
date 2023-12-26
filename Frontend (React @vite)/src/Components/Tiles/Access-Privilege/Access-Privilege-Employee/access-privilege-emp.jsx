@@ -74,6 +74,8 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const AccessPrivilegeEmp = () => {
+  const Base_URL = import.meta.env.VITE_BASE_URL;
+  
   const classes = useStyles();
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
@@ -128,7 +130,7 @@ const AccessPrivilegeEmp = () => {
   }, []);
 
   const fetchData = async () => {
-    await axios.get(`/api/access-request/empID/${empID}`, {
+    await axios.get(`${Base_URL}/api/access-request/empID/${empID}`, {
       headers: {
         'Authorization': `Bearer ${localStorage.token}`          //for verification (IMP)
       }
@@ -138,16 +140,7 @@ const AccessPrivilegeEmp = () => {
         setTotalAccess(res.data)
       })
 
-    // -------------------Manager List Array of Data------------------------//
-    // await axios.get(`/api/users`)
-    //   .then((res) => {
-    //     setManagerList(res.data.filter((user) => 
-    //        user.designation === "Manager"
-    //     ))
-    //   })
-
-    //OR
-    await axios.get('/api/users/managers', {
+    await axios.get(`${Base_URL}/api/users/managers`, {
       headers: {
         'Authorization': `Bearer ${localStorage.token}`          //for verification (IMP)
       }
@@ -161,7 +154,7 @@ const AccessPrivilegeEmp = () => {
   const [accessDetails, setAccessDetails] = useState({})
 
   const viewAccessDetails = async (uid) => {
-    await axios.get(`/api/access-request/${uid}`, {
+    await axios.get(`${Base_URL}/api/access-request/${uid}`, {
       headers: {
         'Authorization': `Bearer ${localStorage.token}`          //for verification (IMP)
       }
@@ -188,7 +181,7 @@ const AccessPrivilegeEmp = () => {
     }
     else {
       setError(null);
-      await axios.post("/api/access-request", accessRequest, {
+      await axios.post(`${Base_URL}/api/access-request`, accessRequest, {
         headers: {
           'Authorization': `Bearer ${localStorage.token}`          //for verification (IMP)
         }
@@ -236,13 +229,9 @@ const AccessPrivilegeEmp = () => {
     }
   ];
 
-  const AccessRecordHeaders = ['S No.', 'Request ID', 'Request For', 'Manager', 'Date', 'View Details', 'Status'];
+  const AccessRecordHeaders = ['S No.', 'Request For', 'Manager', 'Date', 'View Details', 'Status'];
 
   const AccessDetailsHeaders = [
-    {
-      header: 'Access Request ID',
-      value: accessDetails?._id
-    },
     {
       header: 'Request For',
       value: accessDetails?.requestFor
@@ -447,10 +436,6 @@ const AccessPrivilegeEmp = () => {
                             fontWeight: "bold",
                           }}>
                           {index + 1}
-                        </TableCell>
-
-                        <TableCell align="center">
-                          {obj._id}
                         </TableCell>
 
                         <TableCell align="center">

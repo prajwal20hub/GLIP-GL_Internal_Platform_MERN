@@ -49,6 +49,8 @@ const useStyles = makeStyles(() => ({
 }));
 
 function PayslipsAdmin() {
+  const Base_URL = import.meta.env.VITE_BASE_URL;
+  
   const classes = useStyles();
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
@@ -74,7 +76,7 @@ function PayslipsAdmin() {
   }, []);
 
   const fetchData = async () => {
-    await axios.get("/api/users", {
+    await axios.get(`${Base_URL}/api/users`, {
       headers: {
         'Authorization': `Bearer ${localStorage.token}`
       }
@@ -97,7 +99,7 @@ function PayslipsAdmin() {
   };
 
   const viewDetails = async (id) => {
-    await axios.get(`/api/users/${id}`, {
+    await axios.get(`${Base_URL}/api/users/${id}`, {
       headers: {
         'Authorization': `Bearer ${localStorage.token}`
       }
@@ -166,7 +168,7 @@ function PayslipsAdmin() {
       month: getDateVal[1] ? getDateVal[1] : null
     }
 
-    await axios.post("/api/payslip", upObj, {
+    await axios.post(`${Base_URL}/api/payslip`, upObj, {
       headers: {
         'Authorization': `Bearer ${localStorage.token}`
       }

@@ -29,6 +29,8 @@ import RadioGroup from '@mui/material/RadioGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
 
 const Register = () => {
+  const Base_URL = import.meta.env.VITE_BASE_URL;
+  
   const navigate = useNavigate();
   const [totalRegistered, setTotalRegistered] = useState();
 
@@ -55,7 +57,7 @@ const Register = () => {
   }, [])
 
   const fetchData = async () => {
-    await axios.get('/api/total-registrations')
+    await axios.get(`${Base_URL}/api/total-registrations`)
       .then((res) => {
         setTotalRegistered(res.data.total_registrations + 1);
         setUser({ ...user, "empID": res.data.total_registrations + 1001 })
@@ -120,16 +122,16 @@ const Register = () => {
     }
     else {
       setError(null);
-      await axios.post('/api/users/register', postObj)
+      axios.post(`${Base_URL}/api/users/register`, postObj)
         .then(() => {
           setError(null);
-          axios.post("/api/leaves-remain", {       //we require this in leave-management-emp
+          axios.post(`${Base_URL}/api/leaves-remain`, {       //we require this in leave-management-emp
             "empID": empID,
             "empName": `${fname} ${lname}`,
             //other fields set default in schema so no need to post them
           })
             .then(() => {
-              axios.put("/api/total-registrations", {
+              axios.put(`${Base_URL}/api/total-registrations`, {
                 total_registrations: totalRegistered,      //update +1
               })
             });
