@@ -73,7 +73,7 @@ const useStyles = makeStyles((theme) => ({
 
 const TransportEmp = () => {
   const Base_URL = import.meta.env.VITE_BASE_URL;
-  
+
   const classes = useStyles();
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
@@ -343,9 +343,19 @@ const TransportEmp = () => {
 
   useEffect(() => {
     if (startDate && endDate) {
-      setTransRequest({
-        ...transRequest, 'weekDays': CountWeekdays(startDate, endDate)
-      })
+      if (endDate < startDate) {
+        setError('End Date must be after Start Date!')
+        setTransRequest({
+          ...transRequest, 'weekDays': "Error"
+        })
+        return;
+      }
+      else {
+        setError(null)
+        setTransRequest({
+          ...transRequest, 'weekDays': CountWeekdays(startDate, endDate)
+        })
+      }
     }
   }, [startDate, endDate])
 
@@ -444,7 +454,8 @@ const TransportEmp = () => {
           <>
             <FormLabel>Week Days</FormLabel>
             <FormAstric>*</FormAstric>
-            <FormInput type="text" placeholder='Calculate Automatically' name='weekDays' value={weekDays} />
+            <FormInput type="text" placeholder='Calculate Automatically'
+              style={{ color: weekDays === 'Error' && 'red' }} name='weekDays' value={weekDays} />
           </>
 
           {/* ----------------------------------------------------------------------- */}
